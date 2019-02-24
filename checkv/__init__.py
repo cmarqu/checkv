@@ -10,9 +10,7 @@ import sys
 logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
-check_result_tag = " - "
 null_log_level = "null_log_level"
-checker = None
 
 
 def is_pass_visible(checker):
@@ -20,7 +18,7 @@ def is_pass_visible(checker):
     return True
 
 
-def passing_check(checker, std_msg, line_num, file_name):
+def passing_check(checker, std_msg, line_num, file_name, level=None):
     """Janitor work for a passing check."""
    
     # TODO: increment stat_checks_idx
@@ -28,7 +26,7 @@ def passing_check(checker, std_msg, line_num, file_name):
     logging.info(std_msg)
 
 
-def failing_check(checker, std_msg, line_num, file_name):
+def failing_check(checker, std_msg, line_num, file_name, level=None):
     """Janitor work for a failing check."""
     
     # TODO: increment stat_checks_idx
@@ -36,12 +34,20 @@ def failing_check(checker, std_msg, line_num, file_name):
     logging.error(std_msg)
 
 
+# -----------------------------------------------------------------------------
+# -- check_(almost)_equal for real
+# -----------------------------------------------------------------------------
+
 def check_equal(got, expected,
-                msg=check_result_tag, max_diff=0.0,
+                checker=None, 
+                msg=" - ", max_diff=0.0,
                 level=null_log_level, line_num=0, file_name=""):
     """Equality Check.
     VUnit doc: https://vunit.github.io/check/user_guide.html#equality-check-check-equal
     """
+
+    assert got is not None
+    assert expected is not None
     
     if abs(got - expected) <= max_diff:
         if is_pass_visible(checker):
@@ -60,3 +66,19 @@ def check_equal(got, expected,
                 "Equality check failed" + msg +
                 "Got abs (" + str(got) + " - " + str(expected) + ") > " + str(max_diff) + "."),
                 line_num=line_num, file_name=file_name)
+
+# -----------------------------------------------------------------------------
+# -- check_failed
+# -----------------------------------------------------------------------------
+def check_failed(msg=""+".",
+                 checker=None,
+                 result=None,
+                 level=null_log_level,
+                 line_num=0, file_name=""):
+
+    if result is not None:
+        msg = " " + result
+    
+    failing_check(checker, std_msg=("Unconditional check failed" + msg + ""),
+                  level=level, line_num=line_num, file_name=file_name)
+
