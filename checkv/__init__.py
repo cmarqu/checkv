@@ -82,3 +82,18 @@ def check_failed(msg=""+".",
     failing_check(checker, std_msg=("Unconditional check failed" + msg + ""),
                   level=level, line_num=line_num, file_name=file_name)
 
+
+# -----------------------------------------------------------------------------
+# -- check_passed
+# -----------------------------------------------------------------------------
+def check_passed(msg=""+".",
+                 checker=None,
+                 result=None,
+                 level=null_log_level,
+                 line_num=0, file_name=""):
+
+    if result is not None:
+        msg = " " + result
+    
+    passing_check(checker, std_msg=("Unconditional check passed" + msg + ""),
+                  level=level, line_num=line_num, file_name=file_name)
