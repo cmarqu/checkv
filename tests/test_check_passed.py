@@ -22,7 +22,7 @@ def test_check_passed2(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'INFO'
-    assert "" in caplog.text  # FIXME
+    assert "" in caplog.text  # FIXME: this always matches!
 
 
 def test_check_passed3(caplog):
