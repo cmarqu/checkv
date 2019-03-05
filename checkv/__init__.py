@@ -11,27 +11,64 @@ logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
 
 
 null_log_level = "null_log_level"
-
+pass_visible = True
 
 def is_pass_visible(checker):
-    """FIXME"""
-    return True
+    """Return whether a passing test should be printed."""
+    # FIXME: make this per checker
+    return pass_visible
 
 
-def passing_check(checker, std_msg, line_num, file_name, level=None):
+def passing_check(checker, std_msg=None, line_num=None, file_name=None, level=None):
     """Janitor work for a passing check."""
    
     # TODO: increment stat_checks_idx
     # TODO: increment stat_passed_idx
-    logging.info(std_msg)
+    if std_msg is not None:
+        logging.info(std_msg)
 
 
-def failing_check(checker, std_msg, line_num, file_name, level=None):
+def failing_check(checker, std_msg=None, line_num=None, file_name=None, level=None):
     """Janitor work for a failing check."""
     
     # TODO: increment stat_checks_idx
     # TODO: increment stat_failed_idx
-    logging.error(std_msg)
+    if std_msg is not None:
+        logging.error(std_msg)
+
+
+
+#  function std_msg (
+#    constant check_result : string;
+#    constant msg          : string;
+#    constant ctx          : string)
+#    return string is
+#    constant msg_i : string(1 to msg'length) := msg;
+#
+#    function replace_result_tag (msg, check_result : string) return string is
+#    begin
+#      if msg'length < check_result_tag'length then
+#        return msg;
+#      elsif msg(1 to check_result_tag'length) = check_result_tag then
+#        return check_result & msg(check_result_tag'length + 1 to msg'right);
+#      else
+#        return msg;
+#      end if;
+#    end function replace_result_tag;
+#
+#    function append_context (msg, ctx : string) return string is
+#    begin
+#      if msg = "" then
+#        return ctx;
+#      elsif ctx = "" then
+#        return msg;
+#      else
+#        return msg & " - " & ctx;
+#      end if;
+#    end function append_context;
+#  begin
+#    return append_context(replace_result_tag(msg_i, check_result), ctx);
+#  end function std_msg;
 
 
 # -----------------------------------------------------------------------------
