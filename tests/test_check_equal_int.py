@@ -24,7 +24,17 @@ def test_check_equal_int_0_1_pass(caplog):
         assert record.levelname == 'INFO'
     assert "Equality check passed - Got abs (0 - 10) <= 10." in caplog.text
 
-    
+
+def test_check_equal_int_0_2_pass_not_visible(caplog):
+    checkv.pass_visible = False
+    checkv.check_equal(0, 10, max_diff=10)
+    checkv.pass_visible = True
+
+    # check that no output happened
+    assert len(caplog.records) == 0
+    assert "" == caplog.text
+
+
 def test_check_equal_int_0_1_fail(caplog):
     checkv.check_equal(0, 10)
     
