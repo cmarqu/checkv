@@ -7,10 +7,9 @@
 import logging
 import sys
 
-logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)
+logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)  # pragma: no mutate
 
 
-null_log_level = "null_log_level"
 pass_visible = True
 
 def is_pass_visible(checker):
@@ -19,18 +18,21 @@ def is_pass_visible(checker):
     return pass_visible
 
 
-def passing_check(checker, std_msg=None, line_num=None, file_name=None, level=None):
+def passing_check(checker,
+                  std_msg=None):
     """Janitor work for a passing check."""
-   
+
     # TODO: increment stat_checks_idx
     # TODO: increment stat_passed_idx
     if std_msg is not None:
         logging.info(std_msg)
 
 
-def failing_check(checker, std_msg=None, line_num=None, file_name=None, level=None):
+def failing_check(checker,
+                  std_msg=None):
     """Janitor work for a failing check."""
-    
+
+
     # TODO: increment stat_checks_idx
     # TODO: increment stat_failed_idx
     if std_msg is not None:
@@ -76,61 +78,55 @@ def failing_check(checker, std_msg=None, line_num=None, file_name=None, level=No
 # -----------------------------------------------------------------------------
 
 def check_equal(got, expected,
-                checker=None, 
-                msg=" - ", max_diff=0.0,
-                level=null_log_level, line_num=0, file_name=""):
+                checker=None,
+                msg=" - ", max_diff=0.0):
     """Equality Check.
+
     VUnit doc: https://vunit.github.io/check/user_guide.html#equality-check-check-equal
     """
 
     assert got is not None
     assert expected is not None
-    
+
     if abs(got - expected) <= max_diff:
         if is_pass_visible(checker):
             passing_check(
                 checker,
                 std_msg=(
                     "Equality check passed" + msg +
-                    "Got abs (" + str(got) + " - " + str(expected) + ") <= " + str(max_diff) + "." ),
-                line_num=line_num, file_name=file_name)
+                    "Got abs (" + str(got) + " - " + str(expected) + ") <= " + str(max_diff) + "." ))
         else:
-            passing_check(checker)
+            passing_check(checker)  # pragma: no mutate
     else:
         failing_check(
             checker,
             std_msg=(
                 "Equality check failed" + msg +
-                "Got abs (" + str(got) + " - " + str(expected) + ") > " + str(max_diff) + "."),
-                line_num=line_num, file_name=file_name)
+                "Got abs (" + str(got) + " - " + str(expected) + ") > " + str(max_diff) + "."))
 
-# -----------------------------------------------------------------------------
-# -- check_failed
-# -----------------------------------------------------------------------------
-def check_failed(msg=""+".",
+
+def check_failed(msg="Unconditional check failed",
                  checker=None,
-                 result=None,
-                 level=null_log_level,
-                 line_num=0, file_name=""):
+                 result=None):
+
 
     if result is not None:
-        msg = " " + result
-    
-    failing_check(checker, std_msg=("Unconditional check failed" + msg + ""),
-                  level=level, line_num=line_num, file_name=file_name)
+        msg = msg + " " + result
+
+    if len(msg) > 0 and not msg.endswith("."):
+        msg = msg + "."
+
+    failing_check(checker, std_msg=msg)
 
 
-# -----------------------------------------------------------------------------
-# -- check_passed
-# -----------------------------------------------------------------------------
-def check_passed(msg=""+".",
+def check_passed(msg="Unconditional check passed",
                  checker=None,
-                 result=None,
-                 level=null_log_level,
-                 line_num=0, file_name=""):
+                 result=None):
 
     if result is not None:
-        msg = " " + result
-    
-    passing_check(checker, std_msg=("Unconditional check passed" + msg + ""),
-                  level=level, line_num=line_num, file_name=file_name)
+        msg = msg + " " + result
+
+    if len(msg) > 0 and not msg.endswith("."):
+        msg = msg + "."
+
+    passing_check(checker, std_msg=msg)

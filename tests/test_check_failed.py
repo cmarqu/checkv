@@ -14,7 +14,8 @@ def test_check_failed1(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'ERROR'
-    assert "Unconditional check failed." in caplog.text
+        assert record.msg == "Unconditional check failed."
+    assert caplog.text == "__init__.py                 39 ERROR    Unconditional check failed.\n"
 
 
 def test_check_failed2(caplog):
@@ -22,7 +23,7 @@ def test_check_failed2(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'ERROR'
-    assert "" in caplog.text  # FIXME
+        assert record.msg == ""
 
 
 def test_check_failed3(caplog):
@@ -30,7 +31,27 @@ def test_check_failed3(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'ERROR'
-    assert "Checking my data." in caplog.text
+        assert record.msg == "Checking my data."
+
+
+def test_check_failed3b(caplog):
+    """Appends a dot at the end of the message if necessary."""
+
+    checkv.check_failed("Checking my data")
+    
+    for record in caplog.records:
+        assert record.levelname == 'ERROR'
+        assert record.msg == "Checking my data."
+
+
+def test_check_failed3c(caplog):
+    """Appends a dot at the end of the message if necessary."""
+
+    checkv.check_failed("x")
+    
+    for record in caplog.records:
+        assert record.levelname == 'ERROR'
+        assert record.msg == "x."
 
 
 def test_check_failed4(caplog):
@@ -38,7 +59,7 @@ def test_check_failed4(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'ERROR'
-    assert "Unconditional check failed for my data." in caplog.text
+        assert record.msg == "Unconditional check failed for my data."
 
 
 my_checker = "FIXME"
@@ -48,4 +69,4 @@ def test_check_failed5(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'ERROR'
-    assert "Unconditional check failed." in caplog.text
+        assert record.msg == "Unconditional check failed."

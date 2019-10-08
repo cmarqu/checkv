@@ -8,13 +8,15 @@
 
 import checkv
 
+# see https://docs.python.org/3/library/logging.html#logrecord-attributes
 
 def test_check_passed1(caplog):
     checkv.check_passed()
     
     for record in caplog.records:
         assert record.levelname == 'INFO'
-    assert "Unconditional check passed." in caplog.text
+        assert record.msg == "Unconditional check passed."
+    assert caplog.text == "__init__.py                 28 INFO     Unconditional check passed.\n"
 
 
 def test_check_passed2(caplog):
@@ -22,7 +24,7 @@ def test_check_passed2(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'INFO'
-    assert "" in caplog.text  # FIXME: this always matches!
+        assert record.msg == ""
 
 
 def test_check_passed3(caplog):
@@ -30,7 +32,27 @@ def test_check_passed3(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'INFO'
-    assert "Checking my data." in caplog.text
+        assert record.msg == "Checking my data."
+
+
+def test_check_passed3b(caplog):
+    """Appends a dot at the end of the message if necessary."""
+
+    checkv.check_passed("Checking my data")
+    
+    for record in caplog.records:
+        assert record.levelname == 'INFO'
+        assert record.msg == "Checking my data."
+
+
+def test_check_passed3c(caplog):
+    """Appends a dot at the end of the message if necessary."""
+
+    checkv.check_passed("x")
+    
+    for record in caplog.records:
+        assert record.levelname == 'INFO'
+        assert record.msg == "x."
 
 
 def test_check_passed4(caplog):
@@ -38,7 +60,7 @@ def test_check_passed4(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'INFO'
-    assert "Unconditional check passed for my data." in caplog.text
+        assert record.msg == "Unconditional check passed for my data."
 
 
 my_checker = "FIXME"
@@ -48,4 +70,4 @@ def test_check_passed5(caplog):
     
     for record in caplog.records:
         assert record.levelname == 'INFO'
-    assert "Unconditional check passed." in caplog.text
+        assert record.msg == "Unconditional check passed."
