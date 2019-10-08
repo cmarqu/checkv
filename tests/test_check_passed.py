@@ -19,7 +19,7 @@ def test_check_passed1(caplog):
         assert record.msg == "Unconditional check passed."
     assert (
         caplog.text
-        == "__init__.py                 28 INFO     Unconditional check passed.\n"
+        == "__init__.py                 30 INFO     Unconditional check passed.\n"
     )
 
 
