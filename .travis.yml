@@ -1,0 +1,40 @@
+language: python
+
+stages:
+  - lint
+  - test
+  - build
+
+before_install:
+  - pip install codecov
+install:
+  - pip install .
+script:
+  - python setup.py test
+after_success:
+  - codecov
+
+jobs:
+  include:
+    - stage: lint
+      python: "3.6"
+      before_install:
+        - pip install flake8
+      before_script: skip
+      after_script: skip
+      script:
+        - flake8
+    - stage: test
+      python: "3.6"
+    - python: "3.7"
+      dist: xenial
+    - os: windows
+      language: sh
+      python: "3.7"
+      before_install:
+        - choco install python --version 3.7.2
+        - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+        - python -m pip install --upgrade pip wheel
+        - python -m pip install codecov
+      after_success:
+        - python -m codecov

@@ -7,10 +7,13 @@
 import logging
 import sys
 
-logging.basicConfig(format='%(message)s', stream=sys.stdout, level=logging.INFO)  # pragma: no mutate
+logging.basicConfig(
+    format="%(message)s", stream=sys.stdout, level=logging.INFO
+)  # pragma: no mutate
 
 
 pass_visible = True
+
 
 def is_pass_visible(checker):
     """Return whether a passing test should be printed."""
@@ -18,8 +21,7 @@ def is_pass_visible(checker):
     return pass_visible
 
 
-def passing_check(checker,
-                  std_msg=None):
+def passing_check(checker, std_msg=None):
     """Janitor work for a passing check."""
 
     # TODO: increment stat_checks_idx
@@ -28,16 +30,13 @@ def passing_check(checker,
         logging.info(std_msg)
 
 
-def failing_check(checker,
-                  std_msg=None):
+def failing_check(checker, std_msg=None):
     """Janitor work for a failing check."""
-
 
     # TODO: increment stat_checks_idx
     # TODO: increment stat_failed_idx
     if std_msg is not None:
         logging.error(std_msg)
-
 
 
 #  function std_msg (
@@ -77,9 +76,8 @@ def failing_check(checker,
 # -- check_(almost)_equal for real
 # -----------------------------------------------------------------------------
 
-def check_equal(got, expected,
-                checker=None,
-                msg=" - ", max_diff=0.0):
+
+def check_equal(got, expected, checker=None, msg=" - ", max_diff=0.0):
     """Equality Check.
 
     VUnit doc: https://vunit.github.io/check/user_guide.html#equality-check-check-equal
@@ -93,22 +91,37 @@ def check_equal(got, expected,
             passing_check(
                 checker,
                 std_msg=(
-                    "Equality check passed" + msg +
-                    "Got abs (" + str(got) + " - " + str(expected) + ") <= " + str(max_diff) + "." ))
+                    "Equality check passed"
+                    + msg
+                    + "Got abs ("
+                    + str(got)
+                    + " - "
+                    + str(expected)
+                    + ") <= "
+                    + str(max_diff)
+                    + "."
+                ),
+            )
         else:
             passing_check(checker)  # pragma: no mutate
     else:
         failing_check(
             checker,
             std_msg=(
-                "Equality check failed" + msg +
-                "Got abs (" + str(got) + " - " + str(expected) + ") > " + str(max_diff) + "."))
+                "Equality check failed"
+                + msg
+                + "Got abs ("
+                + str(got)
+                + " - "
+                + str(expected)
+                + ") > "
+                + str(max_diff)
+                + "."
+            ),
+        )
 
 
-def check_failed(msg="Unconditional check failed",
-                 checker=None,
-                 result=None):
-
+def check_failed(msg="Unconditional check failed", checker=None, result=None):
 
     if result is not None:
         msg = msg + " " + result
@@ -119,9 +132,7 @@ def check_failed(msg="Unconditional check failed",
     failing_check(checker, std_msg=msg)
 
 
-def check_passed(msg="Unconditional check passed",
-                 checker=None,
-                 result=None):
+def check_passed(msg="Unconditional check passed", checker=None, result=None):
 
     if result is not None:
         msg = msg + " " + result
