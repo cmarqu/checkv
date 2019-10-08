@@ -10,7 +10,7 @@ before_install:
 install:
   - pip install .
 script:
-  - python setup.py test
+  - coverage run -m pytest
 after_success:
   - codecov
 
