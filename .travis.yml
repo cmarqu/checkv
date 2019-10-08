@@ -6,6 +6,7 @@ stages:
   - build
 
 before_install:
+  - pip install pytest
   - pip install codecov
 install:
   - pip install .
