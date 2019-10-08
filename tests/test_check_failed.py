@@ -16,8 +16,7 @@ def test_check_failed1(caplog):
         assert record.levelname == "ERROR"
         assert record.msg == "Unconditional check failed."
     assert (
-        caplog.text
-        == "__init__.py                 39 ERROR    Unconditional check failed.\n"
+        caplog.text.endswith("Unconditional check failed.\n")
     )
 
 
